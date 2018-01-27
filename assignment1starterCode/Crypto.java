@@ -9,24 +9,26 @@ public class Crypto
 
     /**
      * @return true is {@code signature} is a valid digital signature of {@code message} under the
-     * key {@code pubKey}. Internally, this uses RSA signature, but the student does not
+     * key {@code publicKey}. Internally, this uses RSA signature, but the student does not
      * have to deal with any of the implementation details of the specific signature
      * algorithm
      */
-    public static boolean verifySignature(PublicKey pubKey, byte[] message, byte[] signature)
+    public static boolean verifySignature(PublicKey publicKey, byte[] message, byte[] signature)
     {
         Signature sig = null;
         try
         {
             sig = Signature.getInstance("SHA256withRSA");
-        } catch (NoSuchAlgorithmException e)
+        }
+        catch (NoSuchAlgorithmException e)
         {
             e.printStackTrace();
         }
         try
         {
-            sig.initVerify(pubKey);
-        } catch (InvalidKeyException e)
+            sig.initVerify(publicKey);
+        }
+        catch (InvalidKeyException e)
         {
             e.printStackTrace();
         }
@@ -34,7 +36,8 @@ public class Crypto
         {
             sig.update(message);
             return sig.verify(signature);
-        } catch (SignatureException e)
+        }
+        catch (SignatureException e)
         {
             e.printStackTrace();
         }

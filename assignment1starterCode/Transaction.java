@@ -13,7 +13,7 @@ public class Transaction
         /**
          * hash of the Transaction whose output is being used
          */
-        public byte[] prevTxHash;
+        public byte[] previousTransactionHash;
         /**
          * used output's index in the previous transaction
          */
@@ -26,18 +26,26 @@ public class Transaction
         public Input(byte[] prevHash, int index)
         {
             if (prevHash == null)
-                prevTxHash = null;
+            {
+                previousTransactionHash = null;
+            }
             else
-                prevTxHash = Arrays.copyOf(prevHash, prevHash.length);
+            {
+                previousTransactionHash = Arrays.copyOf(prevHash, prevHash.length);
+            }
             outputIndex = index;
         }
 
         public void addSignature(byte[] sig)
         {
             if (sig == null)
+            {
                 signature = null;
+            }
             else
+            {
                 signature = Arrays.copyOf(sig, sig.length);
+            }
         }
     }
 
@@ -101,7 +109,7 @@ public class Transaction
         for (int i = 0; i < inputs.size(); i++)
         {
             Input in = inputs.get(i);
-            UTXO u = new UTXO(in.prevTxHash, in.outputIndex);
+            UTXO u = new UTXO(in.previousTransactionHash, in.outputIndex);
             if (u.equals(ut))
             {
                 inputs.remove(i);
@@ -115,15 +123,19 @@ public class Transaction
         // ith input and all outputs
         ArrayList<Byte> sigData = new ArrayList<Byte>();
         if (index > inputs.size())
+        {
             return null;
+        }
         Input in = inputs.get(index);
-        byte[] prevTxHash = in.prevTxHash;
+        byte[] prevTxHash = in.previousTransactionHash;
         ByteBuffer b = ByteBuffer.allocate(Integer.SIZE / 8);
         b.putInt(in.outputIndex);
         byte[] outputIndex = b.array();
         if (prevTxHash != null)
+        {
             for (int i = 0; i < prevTxHash.length; i++)
                 sigData.add(prevTxHash[i]);
+        }
         for (int i = 0; i < outputIndex.length; i++)
             sigData.add(outputIndex[i]);
         for (Output op : outputs)
@@ -155,19 +167,23 @@ public class Transaction
         ArrayList<Byte> rawTx = new ArrayList<Byte>();
         for (Input in : inputs)
         {
-            byte[] prevTxHash = in.prevTxHash;
+            byte[] prevTxHash = in.previousTransactionHash;
             ByteBuffer b = ByteBuffer.allocate(Integer.SIZE / 8);
             b.putInt(in.outputIndex);
             byte[] outputIndex = b.array();
             byte[] signature = in.signature;
             if (prevTxHash != null)
+            {
                 for (int i = 0; i < prevTxHash.length; i++)
                     rawTx.add(prevTxHash[i]);
+            }
             for (int i = 0; i < outputIndex.length; i++)
                 rawTx.add(outputIndex[i]);
             if (signature != null)
+            {
                 for (int i = 0; i < signature.length; i++)
                     rawTx.add(signature[i]);
+            }
         }
         for (Output op : outputs)
         {
@@ -199,7 +215,8 @@ public class Transaction
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(getRawTx());
             hash = md.digest();
-        } catch (NoSuchAlgorithmException x)
+        }
+        catch (NoSuchAlgorithmException x)
         {
             x.printStackTrace(System.err);
         }
