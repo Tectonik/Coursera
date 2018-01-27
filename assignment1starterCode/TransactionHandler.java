@@ -2,8 +2,8 @@ public class transactionHandler
 {
 
     /**
-     * Creates a public ledger whose current UTXOPool (collection of unspent transaction outputs) is
-     * {@code unspentTransactionOutputPool}. This should make a copy of unspentTransactionOutputPool by using the UTXOPool(UTXOPool uPool)
+     * Creates a public ledger whose current UnspentTransactionOutputPool (collection of unspent transaction outputs) is
+     * {@code unspentTransactionOutputPool}. This should make a copy of unspentTransactionOutputPool by using the UnspentTransactionOutputPool(UnspentTransactionOutputPool uPool)
      * constructor.
      */
     public transactionHandler(UnspentTransactionOutputPool unspentTransactionOutputPool)
@@ -14,14 +14,14 @@ public class transactionHandler
 
     /**
      * @return true if:
-     * (1) all outputs claimed by {@code tx} are in the current UnspentTransactionOutput pool,
-     * (2) the signatures on each input of {@code tx} are valid,
-     * (3) no UnspentTransactionOutput is claimed multiple times by {@code tx},
-     * (4) all of {@code tx}s output values are non-negative, and
-     * (5) the sum of {@code tx}s input values is greater than or equal to the sum of its output
+     * (1) all outputs claimed by {@code transaction} are in the current UnspentTransactionOutput pool,
+     * (2) the signatures on each input of {@code transaction} are valid,
+     * (3) no UnspentTransactionOutput is claimed multiple times by {@code transaction},
+     * (4) all of {@code transaction}s output values are non-negative, and
+     * (5) the sum of {@code transaction}s input values is greater than or equal to the sum of its output
      * values; and false otherwise.
      */
-    public boolean isValidTx(Transaction tx)
+    public boolean isValidTransaction(Transaction transaction)
     {
         // IMPLEMENT THIS
         // Check keys?
