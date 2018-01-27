@@ -9,6 +9,7 @@ public class transactionHandler
     public transactionHandler(UnspentTransactionOutputPool unspentTransactionOutputPool)
     {
         // IMPLEMENT THIS
+        // Wat?
     }
 
     /**
@@ -23,6 +24,7 @@ public class transactionHandler
     public boolean isValidTx(Transaction tx)
     {
         // IMPLEMENT THIS
+        // Check keys?
     }
 
     /**
@@ -30,7 +32,7 @@ public class transactionHandler
      * transaction for correctness, returning a mutually valid array of accepted transactions, and
      * updating the current UnspentTransactionOutput pool as appropriate.
      */
-    public Transaction[] handleTxs(Transaction[] possibleTxs)
+    public Transaction[] handleTransactions(Transaction[] possibleTtransactionss)
     {
         // IMPLEMENT THIS
     }

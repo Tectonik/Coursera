@@ -89,30 +89,30 @@ public class UnspentTransactionOutput implements Comparable<UnspentTransactionOu
     public int compareTo(UnspentTransactionOutput unspentTransactionOutput)
     {
         byte[] hash = unspentTransactionOutput.txHash;
-        int in = unspentTransactionOutput.index;
-        if (in > index)
+        int unspentTransactionOutputIndex = unspentTransactionOutput.index;
+        if (unspentTransactionOutputIndex > this.index)
         {
             return -1;
         }
-        else if (in < index)
+        else if (unspentTransactionOutputIndex < this.index)
         {
             return 1;
         }
         else
         {
-            int len1 = transactionHash.length;
-            int len2 = hash.length;
-            if (len2 > len1)
+            int transactionHashLength = transactionHash.length;
+            int hashLength = hash.length;
+            if (hashLength > transactionHashLength)
             {
                 return -1;
             }
-            else if (len2 < len1)
+            else if (hashLength < transactionHashLength)
             {
                 return 1;
             }
             else
             {
-                for (int i = 0; i < len1; i++)
+                for (int i = 0; i < transactionHashLength; i++)
                 {
                     if (hash[i] > transactionHash[i])
                     {
