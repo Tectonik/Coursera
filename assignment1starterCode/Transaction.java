@@ -271,6 +271,7 @@ public class Transaction
         {
             return inputs.get(index);
         }
+
         return null;
     }
 
@@ -280,6 +281,7 @@ public class Transaction
         {
             return outputs.get(index);
         }
+
         return null;
     }
 

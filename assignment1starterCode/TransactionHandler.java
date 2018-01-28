@@ -8,8 +8,19 @@ public class transactionHandler
      */
     public transactionHandler(UnspentTransactionOutputPool unspentTransactionOutputPool)
     {
-        // IMPLEMENT THIS
-        // Wat?
+        this.unspentTransactionOutputPool() = new unspentTransactionOutputPool(unspentTransactionOutputPool);
+    }
+
+    private UnspentTransactionOutputPool unspentTransactionOutputPool;
+
+    public UnspentTransactionOutputPool getUnspentTransactionOutputPool()
+    {
+        return this.unspentTransactionOutputPool;
+    }
+
+    public void setUnspentTransactionOutputPool(UnspentTransactionOutputPool unspentTransactionOutputPool)
+    {
+        this.unspentTransactionOutputPool = unspentTransactionOutputPool;
     }
 
     /**
@@ -23,7 +34,8 @@ public class transactionHandler
      */
     public boolean isValidTransaction(Transaction transaction)
     {
-        // VerifySignature
+        Crypto cryptographics = new Crypto();
+
     }
 
     /**
