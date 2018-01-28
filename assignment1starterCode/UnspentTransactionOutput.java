@@ -49,25 +49,29 @@ public class UnspentTransactionOutput implements Comparable<UnspentTransactionOu
         {
             return false;
         }
+
         if (getClass() != other.getClass())
         {
             return false;
         }
 
         UnspentTransactionOutput unspentTransactionOutput = (UnspentTransactionOutput) other;
-        byte[] hash = unspentTransactionOutput.txHash;
+        byte[] hash = unspentTransactionOutput.transactionHash;
         int in = unspentTransactionOutput.index;
+
         if (hash.length != transactionHash.length || index != in)
         {
             return false;
         }
-        for (int i = 0; i < hash.length; i++)
+
+        for (int current = 0; current < hash.length; current++)
         {
-            if (hash[i] != transactionHash[i])
+            if (hash[current] != transactionHash[current])
             {
                 return false;
             }
         }
+
         return true;
     }
 

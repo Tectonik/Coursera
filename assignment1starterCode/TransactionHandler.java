@@ -23,8 +23,7 @@ public class transactionHandler
      */
     public boolean isValidTransaction(Transaction transaction)
     {
-        // IMPLEMENT THIS
-        // Check keys?
+        // VerifySignature
     }
 
     /**
@@ -32,9 +31,11 @@ public class transactionHandler
      * transaction for correctness, returning a mutually valid array of accepted transactions, and
      * updating the current UnspentTransactionOutput pool as appropriate.
      */
-    public Transaction[] handleTransactions(Transaction[] possibleTtransactionss)
+    public Transaction[] handleTransactions(Transaction[] possibleTransactions)
     {
-        // IMPLEMENT THIS
+        // Scrooge organizes transactions into time periods or blocks.
+        // In each block, Scrooge will receive a list of transactions,
+        // validate the transactions he receives, and publish a list of validated transactions.
     }
 
 }

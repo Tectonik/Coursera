@@ -13,14 +13,17 @@ public class Transaction
         /**
          * hash of the Transaction whose output is being used
          */
+
         public byte[] previousTransactionHash;
         /**
          * used output's index in the previous transaction
          */
+
         public int outputIndex;
         /**
-         * the signature produced to check validity
+         * the signature produced to check valid
          */
+
         public byte[] signature;
 
         public Input(byte[] prevHash, int index)
@@ -36,15 +39,15 @@ public class Transaction
             outputIndex = index;
         }
 
-        public void addSignature(byte[] sig)
+        public void addSignature(byte[] signature)
         {
-            if (sig == null)
+            if (signature == null)
             {
-                signature = null;
+                this.signature = null;
             }
             else
             {
-                signature = Arrays.copyOf(sig, sig.length);
+                this.signature = Arrays.copyOf(signature, signature.length);
             }
         }
     }
@@ -55,15 +58,16 @@ public class Transaction
          * value in bitcoins of the output
          */
         public double value;
+
         /**
          * the address or public key of the recipient
          */
         public PublicKey address;
 
-        public Output(double v, PublicKey addr)
+        public Output(double value, PublicKey address)
         {
-            value = v;
-            address = addr;
+            this.value = value;
+            this.address = address;
         }
     }
 
@@ -71,7 +75,9 @@ public class Transaction
      * hash of the transaction, its unique id
      */
     private byte[] hash;
+
     private ArrayList<Input> inputs;
+
     private ArrayList<Output> outputs;
 
     public Transaction()
@@ -80,16 +86,16 @@ public class Transaction
         outputs = new ArrayList<Output>();
     }
 
-    public Transaction(Transaction tx)
+    public Transaction(Transaction transaction)
     {
-        hash = tx.hash.clone();
-        inputs = new ArrayList<Input>(tx.inputs);
-        outputs = new ArrayList<Output>(tx.outputs);
+        hash = transaction.hash.clone();
+        inputs = new ArrayList<Input>(transaction.inputs);
+        outputs = new ArrayList<Output>(transaction.outputs);
     }
 
-    public void addInput(byte[] prevTxHash, int outputIndex)
+    public void addInput(byte[] previousTransactionHash, int outputIndex)
     {
-        Input in = new Input(prevTxHash, outputIndex);
+        Input in = new Input(previousTransactionHash, outputIndex);
         inputs.add(in);
     }
 
@@ -104,15 +110,15 @@ public class Transaction
         inputs.remove(index);
     }
 
-    public void removeInput(UTXO ut)
+    public void removeInput(UnspentTransactionOutput unspentTransactionOutput)
     {
-        for (int i = 0; i < inputs.size(); i++)
+        for (int current = 0; current < inputs.size(); current++)
         {
-            Input in = inputs.get(i);
-            UTXO u = new UTXO(in.previousTransactionHash, in.outputIndex);
-            if (u.equals(ut))
+            Input input = inputs.get(current);
+            UnspentTransactionOutput u = new UnspentTransactionOutput(input.previousTransactionHash, input.outputIndex);
+            if (u.equals(unspentTransactionOutput))
             {
-                inputs.remove(i);
+                inputs.remove(current);
                 return;
             }
         }
@@ -121,40 +127,45 @@ public class Transaction
     public byte[] getRawDataToSign(int index)
     {
         // ith input and all outputs
-        ArrayList<Byte> sigData = new ArrayList<Byte>();
+        ArrayList<Byte> signatureData = new ArrayList<Byte>();
         if (index > inputs.size())
         {
             return null;
         }
-        Input in = inputs.get(index);
-        byte[] prevTxHash = in.previousTransactionHash;
-        ByteBuffer b = ByteBuffer.allocate(Integer.SIZE / 8);
-        b.putInt(in.outputIndex);
-        byte[] outputIndex = b.array();
-        if (prevTxHash != null)
+
+        Input input = inputs.get(index);
+        byte[] previousTransactionHash = input.previousTransactionHash;
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.SIZE / 8);
+        buffer.putInt(input.outputIndex);
+        byte[] outputIndex = buffer.array();
+
+        if (previousTransactionHash != null)
         {
-            for (int i = 0; i < prevTxHash.length; i++)
-                sigData.add(prevTxHash[i]);
+            for (int current = 0; current < previousTransactionHash.length; current++)
+                signatureData.add(previousTransactionHash[current]);
         }
-        for (int i = 0; i < outputIndex.length; i++)
-            sigData.add(outputIndex[i]);
-        for (Output op : outputs)
+        for (int current = 0; current < outputIndex.length; current++)
+            signatureData.add(outputIndex[current]);
+        for (Output output : outputs)
         {
             ByteBuffer bo = ByteBuffer.allocate(Double.SIZE / 8);
-            bo.putDouble(op.value);
+            bo.putDouble(output.value);
             byte[] value = bo.array();
-            byte[] addressBytes = op.address.getEncoded();
+            byte[] addressBytes = output.address.getEncoded();
             for (int i = 0; i < value.length; i++)
-                sigData.add(value[i]);
+                signatureData.add(value[i]);
 
             for (int i = 0; i < addressBytes.length; i++)
-                sigData.add(addressBytes[i]);
+                signatureData.add(addressBytes[i]);
         }
-        byte[] sigD = new byte[sigData.size()];
-        int i = 0;
-        for (Byte sb : sigData)
-            sigD[i++] = sb;
-        return sigD;
+        byte[] signatureD = new byte[signatureData.size()];
+        int current = 0;
+        for (Byte sb : signatureData)
+        {
+            signatureD[current++] = sb;
+        }
+
+        return signatureD;
     }
 
     public void addSignature(byte[] signature, int index)
@@ -162,69 +173,81 @@ public class Transaction
         inputs.get(index).addSignature(signature);
     }
 
-    public byte[] getRawTx()
+    public byte[] getRawTransaction()
     {
-        ArrayList<Byte> rawTx = new ArrayList<Byte>();
-        for (Input in : inputs)
+        ArrayList<Byte> rawTransaction = new ArrayList<Byte>();
+        for (Input input : inputs)
         {
-            byte[] prevTxHash = in.previousTransactionHash;
-            ByteBuffer b = ByteBuffer.allocate(Integer.SIZE / 8);
-            b.putInt(in.outputIndex);
-            byte[] outputIndex = b.array();
-            byte[] signature = in.signature;
-            if (prevTxHash != null)
+            byte[] previousTransactionHash = input.previousTransactionHash;
+            ByteBuffer buffer = ByteBuffer.allocate(Integer.SIZE / 8);
+            buffer.putInt(input.outputIndex);
+            byte[] outputIndex = buffer.array();
+            byte[] signature = input.signature;
+
+            if (previousTransactionHash != null)
             {
-                for (int i = 0; i < prevTxHash.length; i++)
-                    rawTx.add(prevTxHash[i]);
+                for (int current = 0; current < previousTransactionHash.length; current++)
+                    rawTransaction.add(previousTransactionHash[current]);
             }
-            for (int i = 0; i < outputIndex.length; i++)
-                rawTx.add(outputIndex[i]);
+
+            for (int current = 0; current < outputIndex.length; current++)
+            {
+                rawTransaction.add(outputIndex[current]);
+            }
+
             if (signature != null)
             {
-                for (int i = 0; i < signature.length; i++)
-                    rawTx.add(signature[i]);
+                for (int current = 0; current < signature.length; current++)
+                {
+                    rawTransaction.add(signature[current]);
+                }
             }
         }
-        for (Output op : outputs)
+        for (Output output : outputs)
         {
-            ByteBuffer b = ByteBuffer.allocate(Double.SIZE / 8);
-            b.putDouble(op.value);
-            byte[] value = b.array();
-            byte[] addressBytes = op.address.getEncoded();
-            for (int i = 0; i < value.length; i++)
+            ByteBuffer buffer = ByteBuffer.allocate(Double.SIZE / 8);
+            buffer.putDouble(output.value);
+            byte[] value = buffer.array();
+            byte[] addressBytes = output.address.getEncoded();
+
+            for (int current = 0; current < value.length; current++)
             {
-                rawTx.add(value[i]);
+                rawTransaction.add(value[current]);
             }
-            for (int i = 0; i < addressBytes.length; i++)
+
+            for (int current = 0; current < addressBytes.length; current++)
             {
-                rawTx.add(addressBytes[i]);
+                rawTransaction.add(addressBytes[current]);
             }
 
         }
-        byte[] tx = new byte[rawTx.size()];
-        int i = 0;
-        for (Byte b : rawTx)
-            tx[i++] = b;
-        return tx;
+        byte[] transaction = new byte[rawTransaction.size()];
+        int current = 0;
+        for (Byte b : rawTransaction)
+        {
+            transaction[current++] = b;
+        }
+
+        return transaction;
     }
 
     public void finalize()
     {
         try
         {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(getRawTx());
-            hash = md.digest();
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(getRawTransaction());
+            hash = messageDigest.digest();
         }
-        catch (NoSuchAlgorithmException x)
+        catch (NoSuchAlgorithmException exception)
         {
-            x.printStackTrace(System.err);
+            exception.printStackTrace(System.err);
         }
     }
 
-    public void setHash(byte[] h)
+    public void setHash(byte[] hash)
     {
-        hash = h;
+        this.hash = hash;
     }
 
     public byte[] getHash()
