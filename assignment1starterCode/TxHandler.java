@@ -30,6 +30,12 @@ public class TxHandler {
     public boolean isValidTx(Transaction tx) {
         Crypto cryptography = new Crypto();
         ArrayList<Transaction.Output> transactionOutputs = tx.getOutputs();
+
+        // for (Transaction.Output output : transactionOutputs) {
+        //     boolean outputIsNotContainedInLedger = this.utxoPool.contains() 
+        //     if ()
+        // }
+
         return false;
     }
 
@@ -39,7 +45,21 @@ public class TxHandler {
      * updating the current UTXO pool as appropriate.
      */
     public Transaction[] handleTxs(Transaction[] possibleTxs) {
-        return new Transaction[1];
+
+        Transaction[] validTransactions = new Transaction[possibleTxs.length];
+
+        int currentIndex = 0;
+        for (Transaction transactionToCheck : possibleTxs) {
+            
+            boolean transactionIsValid = isValidTx(transactionToCheck);            
+            if (transactionIsValid){
+                validTransactions[currentIndex++] = transactionToCheck;
+            }
+        }
+
+        // Update current UTXOPool
+
+        return validTransactions;
     }
 
 }
