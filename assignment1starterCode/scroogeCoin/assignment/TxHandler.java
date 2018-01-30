@@ -36,24 +36,36 @@ public class TxHandler
         Crypto cryptography = new Crypto();
 
         ArrayList<Transaction.Output> transactionOutputs = tx.getOutputs();
-        HashSet<Transaction.UTXO> outputVerifier = new HashSet<Transaction.UTXO>();
+        // HashSet<Transaction.UTXO> outputVerifier = new HashSet<Transaction.UTXO>();
 
         int inputValues = 0;
         int outputValues = 0;
 
-        for (Transaction.Input input : tx.getInputs())
+        int numberOfInputs = tx.numInputs()
+        for (int current = 0; current < numberOfInputs; current++))
         {
-            boolean signatureIsValid = cryptography.verifySignature();
-            input.
+            Transaction.input currentInput = tx.getInput(current);
+                        
         }
 
         for (Transaction.Output output : transactionOutputs)
         {
 
-            if ()
+            // if ()
         }
 
-        return true;
+        boolean alloutputsClaimedAreInCurrentUTXOPool = true;
+        boolean allSignaturesAreValid = true;
+        boolean allUTXOsAreClaimedOnce = true;
+        boolean allInputsArePositive = true;
+        boolean inputsDoNotExceedOutputs = true;
+
+        boolean transactionIsValid = alloutputsClaimedAreInCurrentUTXOPool 
+                                    && allSignaturesAreValid 
+                                    && allUTXOsAreClaimedOnce
+                                    && allInputsArePositive
+                                    && inputsDoNotExceedOutputs;
+        return transactionIsValid;
     }
 
     /**
