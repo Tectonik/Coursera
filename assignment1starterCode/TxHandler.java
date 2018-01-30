@@ -31,10 +31,10 @@ public class TxHandler {
         Crypto cryptography = new Crypto();
         ArrayList<Transaction.Output> transactionOutputs = tx.getOutputs();
 
-        // for (Transaction.Output output : transactionOutputs) {
-        //     boolean outputIsNotContainedInLedger = this.utxoPool.contains() 
-        //     if ()
-        // }
+        for (Transaction.Output output : transactionOutputs) {
+            boolean outputIsNotContainedInLedger = this.utxoPool.contains() 
+            if ()
+        }
 
         return false;
     }
