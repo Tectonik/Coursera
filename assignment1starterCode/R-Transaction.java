@@ -173,7 +173,7 @@ public class Transaction
         inputs.get(index).addSignature(signature);
     }
 
-    public byte[] getRawTransaction()
+    public byte[] getTransactionId()
     {
         ArrayList<Byte> rawTransaction = new ArrayList<Byte>();
         for (Input input : inputs)
