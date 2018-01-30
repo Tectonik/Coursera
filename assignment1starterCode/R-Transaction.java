@@ -13,17 +13,16 @@ public class Transaction
         /**
          * hash of the Transaction whose output is being used
          */
-
         public byte[] previousTransactionHash;
+
         /**
          * used output's index in the previous transaction
          */
-
         public int outputIndex;
+
         /**
          * the signature produced to check valid
          */
-
         public byte[] signature;
 
         public Input(byte[] prevHash, int index)
