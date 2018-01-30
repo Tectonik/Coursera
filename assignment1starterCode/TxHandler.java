@@ -1,6 +1,7 @@
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -28,15 +29,26 @@ public class TxHandler {
      *     values; and false otherwise.
      */
     public boolean isValidTx(Transaction tx) {
+
         Crypto cryptography = new Crypto();
+
         ArrayList<Transaction.Output> transactionOutputs = tx.getOutputs();
+        HashSet<Transaction.UTXO> outputVerifier = new HashSet<Transaction.UTXO>();
+
+        int inputValues = 0;
+        int outputValues = 0;
+
+        for (Transaction.Input input : tx.getInputs()) {
+            boolean signatureIsValid = cryptography.verifySignature();            
+            input.
+        }
 
         for (Transaction.Output output : transactionOutputs) {
-            boolean outputIsNotContainedInLedger = this.utxoPool.contains() 
+
             if ()
         }
 
-        return false;
+        return true;
     }
 
     /**
